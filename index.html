@@ -2,29 +2,80 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Адаптація під розміри будь-яких екранів та заборона випадкового масштабування -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Мій перший PWA</title>
+    
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#4CAF50">
+
+    <!-- Додаткові налаштування для повного екрану на iOS (Safari) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Мій PWA">
+
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background-color: #f0f0f0; margin-top: 50px; }
-        .card { background: white; padding: 20px; border-radius: 10px; display: inline-block; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h1 { color: #4CAF50; }
+        /* Обнуляємо відступи браузера, щоб додаток займав 100% екрану */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Розтягує на всю висоту екрану */
+            padding: 20px;
+        }
+
+        /* Контейнер, який гарно виглядає і на смартфоні, і на великому планшеті */
+        .app-container {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .icon-placeholder {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            color: #4CAF50;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>Привіт! Це мій перший PWA! 🎉</h1>
-        <p>Він працює прямо з вашого смартфона.</p>
+
+    <div class="app-container">
+        <div class="icon-placeholder">📱</div>
+        <h1>Мій повноекранний PWA</h1>
+        <p>Тепер це виглядає як справжній мобільний додаток. Жодних адресних рядків та рамок браузера!</p>
     </div>
 
     <script>
-        // Реєстрація Service Worker для роботи офлайн
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('Service Worker зареєстровано!', reg))
-                    .catch(err => console.log('Помилка реєстрації SW:', err));
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker зареєстровано!'))
+                    .catch(err => console.log('Помилка SW:', err));
             });
         }
     </script>
