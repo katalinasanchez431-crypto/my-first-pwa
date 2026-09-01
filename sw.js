@@ -1,9 +1,10 @@
-const CACHE_NAME = 'pwa-v3'; // <--- Нова версія v3
+const CACHE_NAME = 'pwa-v4'; 
 const ASSETS = [
-  './index.html',
-  './manifest.json',
-  './icon-192.png',
-  './icon-512.png'
+  '/my-first-pwa/',
+  '/my-first-pwa/index.html',
+  '/my-first-pwa/manifest.json',
+  '/my-first-pwa/icon-192.png',
+  '/my-first-pwa/icon-512.png'
 ];
 
 self.addEventListener('install', (e) => {
