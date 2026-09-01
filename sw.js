@@ -1,20 +1,20 @@
-const CACHE_NAME = 'pwa-v2';
+const CACHE_NAME = 'pwa-v3'; // <--- Нова версія v3
 const ASSETS = [
   './index.html',
-  './manifest.json'
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
-// Встановлення та очищення старого кешу
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS);
     })
   );
-  self.skipWaiting(); // Примусово активуємо новий SW відразу
+  self.skipWaiting();
 });
 
-// Перехоплення запитів
 self.addEventListener('fetch', (e) => {
   e.respondWith(
     caches.match(e.request).then((response) => {
