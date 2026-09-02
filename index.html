@@ -2,84 +2,186 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <!-- Адаптація під розміри будь-яких екранів та заборона випадкового масштабування -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Мій перший PWA</title>
-    
-    <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#4CAF50">
-
-    <!-- Додаткові налаштування для повного екрану на iOS (Safari) -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Мій PWA">
+    <title>Мій Супер PWA Клікер</title>
+    <link rel="manifest" href="/my-first-pwa/manifest.json">
+    <meta name="theme-color" content="#6200ee">
 
     <style>
-        /* Обнуляємо відступи браузера, щоб додаток займав 100% екрану */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            user-select: none; /* Забороняємо виділення тексту при кліках */
+            -webkit-user-select: none;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e1e2f 0%, #0f0f1a 100%);
+            color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* Розтягує на всю висоту екрану */
+            min-height: 100vh;
             padding: 20px;
+            overflow: hidden;
         }
 
-        /* Контейнер, який гарно виглядає і на смартфоні, і на великому планшеті */
-        .app-container {
-            background: white;
-            padding: 30px 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        .app-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px 30px;
+            border-radius: 30px;
             text-align: center;
-            max-width: 450px;
+            max-width: 400px;
             width: 100%;
-        }
-
-        .icon-placeholder {
-            font-size: 50px;
-            margin-bottom: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
 
         h1 {
-            color: #4CAF50;
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: #a2a2d0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        p {
-            color: #666;
-            font-size: 16px;
-            line-height: 1.5;
+        .counter-box {
+            font-size: 64px;
+            font-weight: bold;
+            margin: 20px 0;
+            background: linear-gradient(45deg, #ff007f, #7f00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 20px rgba(127, 0, 255, 0.3);
+            transition: transform 0.1s ease;
+        }
+
+        /* Велика інтерактивна кнопка-куля */
+        .click-sphere {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #a044ff, #6a00f4);
+            margin: 30px auto;
+            box-shadow: 0 10px 30px rgba(106, 0, 244, 0.5), 
+                        inset -10px -10px 20px rgba(0,0,0,0.4),
+                        inset 10px 10px 20px rgba(255,255,255,0.4);
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        .click-sphere:active {
+            transform: scale(0.92);
+            box-shadow: 0 5px 15px rgba(106, 0, 244, 0.7),
+                        inset -5px -5px 10px rgba(0,0,0,0.4);
+        }
+
+        .status-text {
+            font-size: 14px;
+            color: #6c6c8c;
+            margin-top: 15px;
+        }
+
+        /* Кнопка скидання */
+        .reset-btn {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #a2a2d0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 25px;
+            transition: all 0.2s ease;
+        }
+
+        .reset-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
         }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <div class="icon-placeholder">📱</div>
-        <h1>Мій повноекранний PWA</h1>
-        <p>Тепер це виглядає як справжній мобільний додаток. Жодних адресних рядків та рамок браузера!</p>
+    <div class="app-card">
+        <h1>Мій Мега Клікер</h1>
+        <p style="color: #6c6c8c; font-size: 14px;">Торкніться сфери, щоб накопичувати енергію</p>
+        
+        <!-- Сфера для кліків -->
+        <div class="click-sphere" id="clickerBtn"></div>
+        
+        <!-- Лічильник -->
+        <div class="counter-box" id="counterDisplay">0</div>
+        
+        <p class="status-text" id="statusMessage">Рівень: Новачок 🌟</p>
+        
+        <button class="reset-btn" id="resetBtn">Скинути прогрес</button>
     </div>
 
     <script>
+        // Логіка клікера та збереження даних в пам'ять телефону (localStorage)
+        const clickerBtn = document.getElementById('clickerBtn');
+        const counterDisplay = document.getElementById('counterDisplay');
+        const statusMessage = document.getElementById('statusMessage');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // Завантажуємо збережене значення або починаємо з 0
+        let count = parseInt(localStorage.getItem('pwa_clicks')) || 0;
+        counterDisplay.textContent = count;
+        updateStatus(count);
+
+        // Обробник кліку по сфері
+        clickerBtn.addEventListener('click', () => {
+            count++;
+            counterDisplay.textContent = count;
+            localStorage.setItem('pwa_clicks', count); // Зберігаємо в пам'ять смартфона
+            
+            // Ефект легкої пульсації цифр при кліку
+            counterDisplay.style.transform = 'scale(1.1)';
+            setTimeout(() => counterDisplay.style.transform = 'scale(1)', 100);
+            
+            updateStatus(count);
+        });
+
+        // Обробник скидання
+        resetBtn.addEventListener('click', () => {
+            if(confirm('Бажаєте скинути рахунок?')) {
+                count = 0;
+                counterDisplay.textContent = count;
+                localStorage.setItem('pwa_clicks', count);
+                updateStatus(count);
+            }
+        });
+
+        // Функція зміни статусів залежно від набраних балів
+        function updateStatus(score) {
+            if (score >= 100) {
+                statusMessage.textContent = "Рівень: Божественний Клікер ⚡🚀";
+                statusMessage.style.color = "#ff007f";
+            } else if (score >= 50) {
+                statusMessage.textContent = "Рівень: Майстер Кліків 🔮";
+                statusMessage.style.color = "#a044ff";
+            } else if (score >= 20) {
+                statusMessage.textContent = "Рівень: Досвідчений 🎯";
+                statusMessage.style.color = "#00ffff";
+            } else {
+                statusMessage.textContent = "Рівень: Новачок 🌟";
+                statusMessage.style.color = "#6c6c8c";
+            }
+        }
+
+        // Реєстрація Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // Вказуємо точний шлях від кореня GitHub Pages з назвою вашого проекту
                 navigator.serviceWorker.register('/my-first-pwa/sw.js')
-                    .then(reg => console.log('Service Worker успішно зареєстровано за правильним шляхом!'))
-                    .catch(err => console.log('Помилка реєстрації:', err));
+                    .then(reg => console.log('SW registered'))
+                    .catch(err => console.log('SW error', err));
             });
         }
     </script>
-
 </body>
 </html>
